@@ -30,9 +30,9 @@ LOCAL_SRC_FILES := \
         src/hw_ar3k.c \
         src/bt_vendor_persist.cpp
 
-# By default, "ENABLE_FM_OVER_UART" is un-defined.
-# To enable the feature, set it as "true" in "BoardConfig.mk".
-ifeq ($(ENABLE_FM_OVER_UART), true)
+
+#Disable this flag in case if FM over UART support not needed
+ifeq ($(QCOM_BT_FM_OVER_UART),true)
 LOCAL_CFLAGS := -DFM_OVER_UART
 endif
 
@@ -64,17 +64,15 @@ LOCAL_SHARED_LIBRARIES := \
         libcutils \
         liblog
 
+LOCAL_HEADER_LIBRARIES := \
+        libutils_headers
+
 LOCAL_MODULE := libbt-vendor
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 LOCAL_MODULE_OWNER := qcom
 
-ifdef TARGET_2ND_ARCH
-LOCAL_MODULE_PATH_32 := $(TARGET_OUT_VENDOR)/lib
-LOCAL_MODULE_PATH_64 := $(TARGET_OUT_VENDOR)/lib64
-else
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
-endif
+LOCAL_VENDOR_MODULE := true
 
 ifeq ($(QCOM_BT_USE_BTNV),true)
 LOCAL_CFLAGS += -DBT_NV_SUPPORT
